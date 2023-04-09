@@ -1,0 +1,3 @@
+# Project exclude paths
+/easy-minio/target/
+/web-commons/target/
