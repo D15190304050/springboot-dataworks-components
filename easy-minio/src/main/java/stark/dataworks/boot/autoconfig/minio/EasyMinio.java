@@ -1,5 +1,6 @@
 package stark.dataworks.boot.autoconfig.minio;
 
+import io.minio.messages.Bucket;
 import stark.dataworks.boot.minio.IProgressListener;
 import stark.dataworks.boot.minio.ProgressInputStream;
 import io.minio.*;
@@ -18,6 +19,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class EasyMinio
@@ -158,5 +160,11 @@ public class EasyMinio
         }
 
         return errorCount == 0;
+    }
+
+    public List<String> listBucketNames() throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException
+    {
+        List<Bucket> bucketList = minioClient.listBuckets();
+        return bucketList.stream().map(Bucket::name).collect(Collectors.toList());
     }
 }
