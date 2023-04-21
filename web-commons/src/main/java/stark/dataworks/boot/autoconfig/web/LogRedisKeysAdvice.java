@@ -2,6 +2,7 @@ package stark.dataworks.boot.autoconfig.web;
 
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Component;
 @NoArgsConstructor
 public class LogRedisKeysAdvice
 {
-    @Pointcut("execution(public static java.lang.String *.*(..))")
+    @Pointcut("execution(public java.lang.String *.*(..))")
     public void returnTypePointcut()
     {
     }
