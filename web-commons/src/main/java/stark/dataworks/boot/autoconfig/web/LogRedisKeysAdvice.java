@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @NoArgsConstructor
 public class LogRedisKeysAdvice
 {
-    @Pointcut("execution(public java.lang.String *.*(..))")
+    @Pointcut("execution(public static java.lang.String *.*(..))")
     public void returnTypePointcut()
     {
     }
