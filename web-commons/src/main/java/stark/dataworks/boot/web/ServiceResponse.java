@@ -97,6 +97,22 @@ public class ServiceResponse<TData>
         this.other = other;
     }
 
+    public Object getExtra(String key)
+    {
+        if (other == null)
+            return null;
+
+        return other.get(key);
+    }
+
+    public void putExtra(String key, Object value)
+    {
+        if (other == null)
+            other = new HashMap<>();
+
+        other.put(key, value);
+    }
+
     @Override
     public String toString()
     {
