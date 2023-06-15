@@ -92,14 +92,14 @@ public class EasyMinio
         return getObjectUrl(bucketName, fileName);
     }
 
-    public String uploadFile(MultipartFile file, String bucketName) throws IOException, ServerException, InsufficientDataException, ErrorResponseException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException
+    public String uploadFile(String bucketName, MultipartFile file) throws IOException, ServerException, InsufficientDataException, ErrorResponseException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException
     {
         String fileName = file.getOriginalFilename();
         InputStream inputStream = file.getInputStream();
         return uploadFileByStream(bucketName, fileName, inputStream);
     }
 
-    public String uploadFile(File file, String bucketName) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException
+    public String uploadFile(String bucketName, File file) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException
     {
         String fileName = file.getName();
         InputStream inputStream = new FileInputStream(file);
@@ -166,5 +166,12 @@ public class EasyMinio
     {
         List<Bucket> bucketList = minioClient.listBuckets();
         return bucketList.stream().map(Bucket::name).collect(Collectors.toList());
+    }
+
+    public InputStream getObjectInputStream(String bucketName, String objectName) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException
+    {
+        GetObjectResponse result = minioClient.getObject(GetObjectArgs.builder().bucket(bucketName).object(objectName).build());
+        log.info("Get object input stream successfully...");
+        return result;
     }
 }
