@@ -1,7 +1,7 @@
 package stark.dataworks.boot;
 
 import lombok.extern.slf4j.Slf4j;
-import stark.dataworks.basic.ExceptionInfoFormatter;
+import stark.dataworks.basic.exceptions.ExceptionInfoFormatter;
 
 @Slf4j
 public class ExceptionLogger
