@@ -1,6 +1,6 @@
 package stark.dataworks.boot.minio;
 
-import stark.dataworks.basic.ExceptionInfoFormatter;
+import stark.dataworks.basic.exceptions.ExceptionInfoFormatter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.FilterInputStream;
