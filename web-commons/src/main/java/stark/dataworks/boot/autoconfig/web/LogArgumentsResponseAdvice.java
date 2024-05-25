@@ -14,7 +14,6 @@ import stark.dataworks.basic.data.json.JsonSerializer;
 @Component
 public class LogArgumentsResponseAdvice
 {
-
     public LogArgumentsResponseAdvice()
     {
     }
@@ -39,7 +38,6 @@ public class LogArgumentsResponseAdvice
     {
     }
 
-
     @Before("advicePointcut()")
     private void logArguments(JoinPoint joinPoint)
     {
@@ -47,11 +45,11 @@ public class LogArgumentsResponseAdvice
         if (arguments.length > 0)
         {
             Class<?>[] parameterTypes = ArgumentBase.getParameterTypes(joinPoint);
-            log.info("Log arguments of " + ArgumentBase.getMethodPath(joinPoint));
+            log.info("Log arguments of {}", ArgumentBase.getMethodPath(joinPoint));
 
             for (int i = 0; i < arguments.length; ++i)
             {
-                log.info("Argument [" + i + "] (" + parameterTypes[i].getName() + ") = " + JsonSerializer.serialize(arguments[i]));
+                log.info("Argument [{}] ({}) = {}", i, parameterTypes[i].getName(), JsonSerializer.serialize(arguments[i]));
             }
         }
     }
@@ -59,6 +57,6 @@ public class LogArgumentsResponseAdvice
     @AfterReturning(value = "advicePointcut()", returning = "response")
     public void logResponse(JoinPoint joinPoint, Object response)
     {
-        log.info("Result of " + ArgumentBase.getMethodPath(joinPoint) + " = " + JsonSerializer.serialize(response));
+        log.info("Result of {} = {}", ArgumentBase.getMethodPath(joinPoint), JsonSerializer.serialize(response));
     }
 }

@@ -44,7 +44,7 @@ public class EasyMinio
         if (!minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build()))
             minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucketName).build());
 
-        log.info("Bucket \"" + bucketName + "\" is created successfully.");
+        log.info("Bucket \"{}\" is created successfully.", bucketName);
     }
 
     public String getObjectUrl(String bucketName, String objectName) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException
@@ -156,7 +156,7 @@ public class EasyMinio
         {
             errorCount++;
             DeleteError error = result.get();
-            log.error("Error in deleting object " + error.objectName() + "; " + error.message());
+            log.error("Error in deleting object {}; {}", error.objectName(), error.message());
         }
 
         return errorCount == 0;

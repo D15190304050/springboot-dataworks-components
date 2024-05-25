@@ -2,6 +2,8 @@ package stark.dataworks.boot.web;
 
 import stark.dataworks.basic.data.json.JsonSerializer;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.HashMap;
 
 public class ServiceResponse<TData>
@@ -117,5 +119,12 @@ public class ServiceResponse<TData>
     public String toString()
     {
         return JsonSerializer.serialize(this);
+    }
+
+    public void writeToResponse(HttpServletResponse response) throws IOException
+    {
+        String resultJson = JsonSerializer.serialize(this);
+        response.getWriter().println(resultJson);
+        response.flushBuffer();
     }
 }

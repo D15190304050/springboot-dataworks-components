@@ -18,10 +18,10 @@ public class TokenHandler
         // If there is no such header, then try to get the token from cookies.
 
         String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+        Cookie[] cookies = request.getCookies();
 
-        if (!StringUtils.hasText(token) && StringUtils.hasText(tokenCookieName))
+        if (!StringUtils.hasText(token) && StringUtils.hasText(tokenCookieName) && cookies != null)
         {
-            Cookie[] cookies = request.getCookies();
             for (Cookie cookie : cookies)
             {
                 if (tokenCookieName.equals(cookie.getName()))
