@@ -55,7 +55,7 @@ public class EasyMinio
                 .object(objectName)
                 .build());
 
-        log.info("URL of object [" + bucketName + "/" + objectName + "] = " + objectUrl);
+        log.info("URL of object [{}/{}] = {}", bucketName, objectName, objectUrl);
         return objectUrl;
     }
 
@@ -173,5 +173,15 @@ public class EasyMinio
         GetObjectResponse result = minioClient.getObject(GetObjectArgs.builder().bucket(bucketName).object(objectName).build());
         log.info("Get object input stream successfully...");
         return result;
+    }
+
+    public void copyObject(String bucketName, String sourceObjectName, String destinationObjectName) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException
+    {
+        minioClient.copyObject(
+                CopyObjectArgs.builder()
+                        .source(CopySource.builder().bucket(bucketName).object(sourceObjectName).build())
+                        .bucket(bucketName)
+                        .object(destinationObjectName)
+                        .build());
     }
 }

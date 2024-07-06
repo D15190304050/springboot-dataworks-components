@@ -48,9 +48,7 @@ public class LogArgumentsResponseAdvice
             log.info("Log arguments of {}", ArgumentBase.getMethodPath(joinPoint));
 
             for (int i = 0; i < arguments.length; ++i)
-            {
                 log.info("Argument [{}] ({}) = {}", i, parameterTypes[i].getName(), JsonSerializer.serialize(arguments[i]));
-            }
         }
     }
 
