@@ -19,6 +19,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -183,5 +184,15 @@ public class EasyMinio
                         .bucket(bucketName)
                         .object(destinationObjectName)
                         .build());
+    }
+
+    public boolean objectExists(String bucketName, String objectName) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException
+    {
+        if (!minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build()))
+            throw new IllegalArgumentException("Bucket does not exist");
+
+        StatObjectResponse statObjectResponse = minioClient.statObject(StatObjectArgs.builder().bucket(bucketName).object(objectName).build());
+
+        return Objects.nonNull(statObjectResponse);
     }
 }
