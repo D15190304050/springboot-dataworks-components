@@ -16,13 +16,13 @@ public class OllamaConnection
     public OllamaConnection(String ollamaHost, int ollamaPort)
     {
         if (!StringUtils.hasText(ollamaHost))
-            throw new IllegalArgumentException("Host name cannot be null or empty");
+            throw new IllegalArgumentException("Host name cannot be null or empty.");
 
         if (ollamaPort < 1 || ollamaPort > 65535)
-            throw new IllegalArgumentException("Port number must be between 1 and 65535");
+            throw new IllegalArgumentException("Port number must be between 1 and 65535.");
 
         if (!ollamaHost.startsWith("http"))
-            throw new IllegalArgumentException("Host name must start with 'http'");
+            throw new IllegalArgumentException("Host name must start with 'http'.");
 
         this.httpUrlPrefix = ollamaHost + ":" + ollamaPort;
         this.httpUrlForOneTimeChat = this.httpUrlPrefix + OllamaHttpApiUrls.ONE_TIME_CHAT;
