@@ -18,6 +18,7 @@
     <modules>
         <module>easy-minio</module>
         <module>web-commons</module>
+        <module>easy-ollama</module>
     </modules>
 
     <properties>
