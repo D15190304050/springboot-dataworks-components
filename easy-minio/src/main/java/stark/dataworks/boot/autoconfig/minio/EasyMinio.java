@@ -1,6 +1,8 @@
 package stark.dataworks.boot.autoconfig.minio;
 
+import com.fasterxml.jackson.databind.util.ByteBufferBackedInputStream;
 import io.minio.messages.Bucket;
+import stark.dataworks.basic.data.json.JsonSerializer;
 import stark.dataworks.boot.minio.IProgressListener;
 import stark.dataworks.boot.minio.ProgressInputStream;
 import io.minio.*;
@@ -11,10 +13,8 @@ import io.minio.messages.DeleteObject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -119,6 +119,26 @@ public class EasyMinio
         log.info("File uploaded successfully...");
     }
 
+    public void putObject(String bucketName, String objectName, Object object) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException
+    {
+        if (object == null)
+            throw new IllegalArgumentException("Object cannot be null.");
+
+        String objectJson = JsonSerializer.serialize(object);
+        if (objectJson == null)
+            throw new IllegalArgumentException("Object can not be serialized.");
+
+        byte[] objectBytes = objectJson.getBytes(StandardCharsets.UTF_8);
+
+        ObjectWriteResponse objectWriteResponse = minioClient.putObject(PutObjectArgs.builder()
+            .bucket(bucketName)
+            .object(objectName)
+            .stream(new ByteArrayInputStream(objectBytes), objectBytes.length, -1)
+            .build());
+
+        log.info("File uploaded successfully...");
+    }
+
     public void composeObjects(String bucketName, String objectName, List<String> sourceObjectNames) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException
     {
         List<ComposeSource> sources = new ArrayList<>();
@@ -174,6 +194,22 @@ public class EasyMinio
         GetObjectResponse result = minioClient.getObject(GetObjectArgs.builder().bucket(bucketName).object(objectName).build());
         log.info("Get object input stream successfully...");
         return result;
+    }
+
+    public <T> T getObject(String bucketName, String objectName, Class<T> clazz) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException
+    {
+        GetObjectResponse getObjectResponse = minioClient.getObject(
+            GetObjectArgs.builder()
+                .bucket(bucketName)
+                .object(objectName)
+                .build());
+
+        try (InputStream inputStream = getObjectResponse)
+        {
+            byte[] objectBytes = inputStream.readAllBytes();
+            String objectJson = new String(objectBytes, StandardCharsets.UTF_8);
+            return JsonSerializer.deserialize(objectJson, clazz);
+        }
     }
 
     public void copyObject(String bucketName, String sourceObjectName, String destinationObjectName) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException

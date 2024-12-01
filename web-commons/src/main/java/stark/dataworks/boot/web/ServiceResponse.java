@@ -1,5 +1,6 @@
 package stark.dataworks.boot.web;
 
+import org.springframework.http.MediaType;
 import stark.dataworks.basic.data.json.JsonSerializer;
 
 import jakarta.servlet.http.HttpServletResponse;
@@ -123,6 +124,7 @@ public class ServiceResponse<TData>
 
     public void writeToResponse(HttpServletResponse response) throws IOException
     {
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         String resultJson = JsonSerializer.serialize(this);
         response.getWriter().println(resultJson);
         response.flushBuffer();
