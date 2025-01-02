@@ -38,4 +38,26 @@ public class OllamaMultiRoundChatSession
         messages.add(chatResponse.getMessage());
         return chatResponse;
     }
+
+    public String runChat(String message)
+    {
+        OllamaMultiRoundChatMessage messageToSend = new OllamaMultiRoundChatMessage();
+        messageToSend.setRole(OllamaChatRoles.USER);
+        messageToSend.setContent(message);
+        messages.add(messageToSend);
+
+        OllamaMultiRoundChatRequest request = new OllamaMultiRoundChatRequest();
+        request.setMessages(messages);
+        request.setModel(model);
+        request.setStream(false);
+
+        OllamaMultiRoundChatResponse chatResponse = restTemplate.postForObject(httpUrlForMultiRoundChat, request, OllamaMultiRoundChatResponse.class);
+        messages.add(chatResponse.getMessage());
+        return chatResponse.getMessage().getContent();
+    }
+
+    public void setInitialMessages(List<OllamaMultiRoundChatMessage> messages)
+    {
+        this.messages.addAll(messages);
+    }
 }
