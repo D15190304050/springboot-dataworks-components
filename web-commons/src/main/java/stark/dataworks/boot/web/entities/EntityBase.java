@@ -1,6 +1,9 @@
 package stark.dataworks.boot.web.entities;
 
 import lombok.Data;
+import stark.coderaider.fluentschema.commons.annotations.AutoIncrement;
+import stark.coderaider.fluentschema.commons.annotations.Column;
+import stark.coderaider.fluentschema.commons.annotations.PrimaryKey;
 
 import java.util.Date;
 
@@ -10,6 +13,8 @@ public abstract class EntityBase
     /**
      * ID of the record.
      */
+    @PrimaryKey
+    @AutoIncrement
     private long id;
 
     /**
@@ -20,6 +25,7 @@ public abstract class EntityBase
     /**
      * Creation time of the record.
      */
+    @Column(defaultValue = "NOW()")
     private Date creationTime;
 
     /**
@@ -30,5 +36,6 @@ public abstract class EntityBase
     /**
      * Last modification time of the record.
      */
+    @Column(defaultValue = "NOW()", onUpdate = "NOW()")
     private Date modificationTime;
 }

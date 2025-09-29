@@ -39,5 +39,11 @@
             <groupId>stark.dataworks</groupId>
             <artifactId>dataworks-basic</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>stark.coderaider</groupId>
+            <artifactId>fluent-schema-commons</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 </project>

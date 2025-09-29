@@ -1,5 +1,6 @@
 package stark.dataworks.boot.web;
 
+import lombok.Data;
 import org.springframework.http.MediaType;
 import stark.dataworks.basic.data.json.JsonSerializer;
 
@@ -7,6 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
 
+@Data
 public class ServiceResponse<TData>
 {
     public static final int SUCCESS_CODE = 0;
@@ -48,56 +50,6 @@ public class ServiceResponse<TData>
     public static<TData> ServiceResponse<TData> buildErrorResponse(CommonErrorResponses response)
     {
         return new ServiceResponse<>(response.getCode(), false, null, response.getMessage(), null);
-    }
-
-    public int getCode()
-    {
-        return code;
-    }
-
-    public void setCode(int code)
-    {
-        this.code = code;
-    }
-
-    public boolean isSuccess()
-    {
-        return success;
-    }
-
-    public void setSuccess(boolean success)
-    {
-        this.success = success;
-    }
-
-    public TData getData()
-    {
-        return data;
-    }
-
-    public void setData(TData data)
-    {
-        this.data = data;
-    }
-
-    public String getMessage()
-    {
-        return message;
-    }
-
-    public void setMessage(String message)
-    {
-        this.message = message;
-    }
-
-    public HashMap<String, Object> getOther()
-    {
-        return other;
-    }
-
-    public void setOther(HashMap<String, Object> other)
-    {
-        this.other = other;
     }
 
     public Object getExtra(String key)
