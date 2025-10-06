@@ -47,11 +47,6 @@ public class ServiceResponse<TData>
         return new ServiceResponse<>(code, false, null, message, null);
     }
 
-    public static<TData> ServiceResponse<TData> buildErrorResponse(CommonErrorResponses response)
-    {
-        return new ServiceResponse<>(response.getCode(), false, null, response.getMessage(), null);
-    }
-
     public Object getExtra(String key)
     {
         if (other == null)
