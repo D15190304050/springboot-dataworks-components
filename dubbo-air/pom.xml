@@ -7,19 +7,14 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>web-commons</artifactId>
+    <artifactId>dubbo-air</artifactId>
     <packaging>jar</packaging>
 
     <properties>
+        <dubbo.version>3.3.5</dubbo.version>
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -27,17 +22,19 @@
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-aop</artifactId>
+            <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
+            <groupId>org.apache.dubbo</groupId>
+            <artifactId>dubbo-spring-boot-starter</artifactId>
+            <version>${dubbo.version}</version>
         </dependency>
 
         <dependency>
             <groupId>stark.dataworks</groupId>
-            <artifactId>dataworks-basic</artifactId>
+            <artifactId>web-commons</artifactId>
+            <version>${parent.version}</version>
         </dependency>
     </dependencies>
 </project>

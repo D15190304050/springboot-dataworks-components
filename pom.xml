@@ -19,6 +19,7 @@
         <module>easy-minio</module>
         <module>web-commons</module>
         <module>easy-ollama</module>
+        <module>dubbo-air</module>
     </modules>
 
     <properties>
