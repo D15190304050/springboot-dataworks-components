@@ -6,10 +6,11 @@ import stark.dataworks.basic.data.json.JsonSerializer;
 
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.HashMap;
 
 @Data
-public class ServiceResponse<TData>
+public class ServiceResponse<TData> implements Serializable
 {
     public static final int SUCCESS_CODE = 0;
 
