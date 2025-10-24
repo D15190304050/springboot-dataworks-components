@@ -12,15 +12,20 @@ public class TokenHandler
     {
     }
 
+    /**
+     * Try to get token from HTTP header AUTHORIZATION. If there is no such header, then try to get the token from cookies.
+     * @param request
+     * @param tokenCookieName
+     * @return
+     */
     public static String getToken(HttpServletRequest request, String tokenCookieName)
     {
-        // Try to get token from HTTP header AUTHORIZATION.
-        // If there is no such header, then try to get the token from cookies.
-
         String token = request.getHeader(HttpHeaders.AUTHORIZATION);
-        Cookie[] cookies = request.getCookies();
+        if (StringUtils.hasText(token))
+            return token;
 
-        if (!StringUtils.hasText(token) && StringUtils.hasText(tokenCookieName) && cookies != null)
+        Cookie[] cookies = request.getCookies();
+        if (StringUtils.hasText(tokenCookieName) && cookies != null)
         {
             for (Cookie cookie : cookies)
             {
