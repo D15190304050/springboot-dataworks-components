@@ -58,7 +58,7 @@ public class TokenHandler
      * @param request
      * @return
      */
-    private static String getTokenFromRequest(ServerHttpRequest request, String tokenCookieName)
+    public static String getTokenFromRequest(ServerHttpRequest request, String tokenCookieName)
     {
         String tokenFromHeaders = getTokenFromHeaders(request);
         return tokenFromHeaders != null ? tokenFromHeaders : getTokenFromCookies(request, tokenCookieName);
