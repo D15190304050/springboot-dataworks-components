@@ -2,8 +2,10 @@ package stark.dataworks.boot.web;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Data
-public class PaginationRequest
+public class PaginationRequest implements Serializable
 {
     private long current;
     private long pageSize;
