@@ -20,6 +20,7 @@
         <module>web-commons</module>
         <module>easy-ollama</module>
         <module>dubbo-air</module>
+        <module>spring-ai-alibaba-enhanced</module>
     </modules>
 
     <properties>
