@@ -13,7 +13,6 @@ import java.util.List;
 
 public class AlibabaChatCompletionExecutor implements IChatCompletionExecutor
 {
-
     private final ChatClient chatClient;
 
     public AlibabaChatCompletionExecutor(ChatClient chatClient)

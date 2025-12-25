@@ -9,10 +9,10 @@ public interface IChatCompletionExecutor
     /**
      * 同步完成一次 Chat Completion
      */
-    String complete(List<ChatMessage> messages);
+    String complete(List<ChatMessage> conversationHistory, String userInput);
 
     /**
      * 流式完成 Chat Completion
      */
-    Flux<String> stream(List<ChatMessage> messages);
+    Flux<String> stream(List<ChatMessage> conversationHistory, String userInput);
 }
