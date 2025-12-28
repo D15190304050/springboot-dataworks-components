@@ -21,28 +21,22 @@ public class AlibabaChatCompletionExecutor implements IChatCompletionExecutor
     }
 
     @Override
-    public String complete(List<ChatMessage> messages)
+    public String complete(List<ChatMessage> messages, String userInput)
     {
-        Prompt prompt = buildPrompt(messages);
-
-        return chatClient
-            .prompt(prompt)
+        return buildChatRequest(messages, userInput)
             .call()
             .content();
     }
 
     @Override
-    public Flux<String> stream(List<ChatMessage> messages)
+    public Flux<String> stream(List<ChatMessage> messages, String userInput)
     {
-        Prompt prompt = buildPrompt(messages);
-
-        return chatClient
-            .prompt(prompt)
+        return buildChatRequest(messages, userInput)
             .stream()
             .content();
     }
 
-    private Prompt buildPrompt(List<ChatMessage> messages)
+    private List<Message> buildMessages(List<ChatMessage> messages)
     {
         List<Message> springMessages = new ArrayList<>();
 
@@ -58,6 +52,13 @@ public class AlibabaChatCompletionExecutor implements IChatCompletionExecutor
             }
         }
 
-        return new Prompt(springMessages);
+        return springMessages;
+    }
+
+    private ChatClient.ChatClientRequestSpec buildChatRequest(List<ChatMessage> messages, String userInput)
+    {
+        return chatClient
+            .prompt(userInput)
+            .messages(buildMessages(messages));
     }
 }

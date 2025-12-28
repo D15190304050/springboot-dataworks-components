@@ -21,6 +21,7 @@
         <module>easy-ollama</module>
         <module>dubbo-air</module>
         <module>spring-ai-alibaba-enhanced</module>
+        <module>examples/default-session</module>
     </modules>
 
     <properties>
