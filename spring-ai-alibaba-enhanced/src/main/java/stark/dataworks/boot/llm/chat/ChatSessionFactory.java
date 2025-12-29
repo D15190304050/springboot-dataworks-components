@@ -11,10 +11,7 @@ public class ChatSessionFactory
         this.chatExecutor = chatExecutor;
     }
 
-    public IChatSession openSession(
-        String systemPrompt,
-        int recentRounds
-    )
+    public IChatSession openSession(String systemPrompt, int recentRounds)
     {
         UUID sessionId = UUID.randomUUID();
 
