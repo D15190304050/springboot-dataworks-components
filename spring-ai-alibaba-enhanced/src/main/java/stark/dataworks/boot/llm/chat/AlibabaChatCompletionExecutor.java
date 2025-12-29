@@ -58,7 +58,8 @@ public class AlibabaChatCompletionExecutor implements IChatCompletionExecutor
     private ChatClient.ChatClientRequestSpec buildChatRequest(List<ChatMessage> messages, String userInput)
     {
         return chatClient
-            .prompt(userInput)
+            .prompt()
+            .user(userInput)
             .messages(buildMessages(messages));
     }
 }

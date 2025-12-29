@@ -5,13 +5,13 @@ import reactor.core.publisher.Flux;
 import java.util.List;
 import java.util.UUID;
 
-class DefaultChatSession implements IChatSession
+public class DefaultChatSession implements IChatSession
 {
     private final UUID sessionId;
     private final IChatContextManager contextManager;
     private final IChatCompletionExecutor chatCompletionExecutor;
 
-    DefaultChatSession(UUID sessionId, IChatContextManager contextManager, IChatCompletionExecutor chatCompletionExecutor)
+    public DefaultChatSession(UUID sessionId, IChatContextManager contextManager, IChatCompletionExecutor chatCompletionExecutor)
     {
         this.sessionId = sessionId;
         this.contextManager = contextManager;
@@ -29,6 +29,7 @@ class DefaultChatSession implements IChatSession
     {
         List<ChatMessage> context = contextManager.buildContext();
         String answer = chatCompletionExecutor.complete(context, userInput);
+//        String answer = "answer" + userInput;
 
         // Note: We need to append user message after calling complete(),
         // otherwise the chat client will get 2 identity user input message, which is not what we want.
