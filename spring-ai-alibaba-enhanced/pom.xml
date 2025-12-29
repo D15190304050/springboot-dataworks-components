@@ -46,5 +46,11 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>stark.dataworks</groupId>
+            <artifactId>web-commons</artifactId>
+            <version>${parent.version}</version>
+        </dependency>
     </dependencies>
 </project>

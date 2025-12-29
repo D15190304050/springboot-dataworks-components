@@ -26,28 +26,7 @@ public class InMemoryChatContextManager implements IChatContextManager
     @Override
     public synchronized List<ChatMessage> buildContext()
     {
-        List<ChatMessage> context = new ArrayList<>();
-
-        // 1. system
-        if (systemPrompt != null && !systemPrompt.isBlank())
-            context.add(new ChatMessage(Role.SYSTEM, systemPrompt));
-
-        int size = messages.size();
-
-        // 2. 首轮（最多 2 条）
-        if (size > 0)
-            context.add(messages.get(0));
-        if (size > 1)
-            context.add(messages.get(1));
-
-        // 3. 最近 N 轮
-        int max = recentRounds * 2;
-        int start = Math.max(2, size - max);
-
-        for (int i = start; i < size; i++)
-            context.add(messages.get(i));
-
-        return context;
+        return RecentRoundMessageExtractor.extract(messages, systemPrompt, recentRounds);
     }
 
     @Override

@@ -2,6 +2,8 @@ package stark.dataworks.examples.llm.controllers;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import stark.dataworks.boot.llm.chat.ChatSessionFactory;
 import stark.dataworks.boot.llm.chat.DefaultChatSession;
@@ -22,6 +24,9 @@ public class DefaultSessionController
     @Autowired
     private ChatSessionFactory chatSessionFactory;
 
+    @Autowired
+    private RedisTemplate<String, String> stringRedisTemplate;
+
     public DefaultSessionController()
     {
         chatSessions = new HashMap<>();
@@ -32,10 +37,15 @@ public class DefaultSessionController
     @PostMapping("/chat")
     public String chat(@RequestBody ChatRequest request)
     {
-        IChatSession chatSession = chatSessions.getOrDefault(request.getSessionId(), chatSessionFactory.openSession(SYSTEM_PROMPT, 1));
-        chatSessions.put(request.getSessionId(), chatSession);
+        String sessionId = request.getSessionId();
+        if (!StringUtils.hasText(sessionId))
+            throw new IllegalArgumentException("Session ID is required.");
 
-        log.info("Chat session ID: {}", request.getSessionId());
+        if (!chatSessions.containsKey(sessionId))
+            chatSessions.put(sessionId, chatSessionFactory.openSession(SYSTEM_PROMPT, 1));
+
+        IChatSession chatSession = chatSessions.get(sessionId);
+        log.info("Chat session ID: {}", sessionId);
 
         return chatSession.chat(request.getUserInput()).getContent();
     }
