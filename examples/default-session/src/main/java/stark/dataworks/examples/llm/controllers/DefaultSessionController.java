@@ -6,7 +6,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import stark.dataworks.boot.llm.chat.ChatSessionFactory;
-import stark.dataworks.boot.llm.chat.DefaultChatSession;
 import stark.dataworks.boot.llm.chat.IChatSession;
 import stark.dataworks.examples.llm.dto.ChatRequest;
 
@@ -42,7 +41,7 @@ public class DefaultSessionController
             throw new IllegalArgumentException("Session ID is required.");
 
         if (!chatSessions.containsKey(sessionId))
-            chatSessions.put(sessionId, chatSessionFactory.openSession(SYSTEM_PROMPT, 1));
+            chatSessions.put(sessionId, chatSessionFactory.createDefaultSession(SYSTEM_PROMPT, 1));
 
         IChatSession chatSession = chatSessions.get(sessionId);
         log.info("Chat session ID: {}", sessionId);

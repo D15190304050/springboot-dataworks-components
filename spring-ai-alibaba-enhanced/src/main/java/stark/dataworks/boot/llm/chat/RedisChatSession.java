@@ -7,15 +7,17 @@ import java.util.UUID;
 public class RedisChatSession implements IChatSession
 {
     private final String sessionId;
+    private final RedisChatContextManager contextManager;
 
-    public RedisChatSession()
+    public RedisChatSession(RedisChatContextManager contextManager)
     {
-        this.sessionId = UUID.randomUUID().toString();
+        this(UUID.randomUUID().toString(), contextManager);
     }
 
-    public RedisChatSession(String sessionId)
+    public RedisChatSession(String sessionId, RedisChatContextManager contextManager)
     {
         this.sessionId = sessionId;
+        this.contextManager = contextManager;
     }
 
     @Override
@@ -39,6 +41,6 @@ public class RedisChatSession implements IChatSession
     @Override
     public void close()
     {
-
+        contextManager.clearCaches();
     }
 }

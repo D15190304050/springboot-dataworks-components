@@ -1,34 +1,47 @@
 package stark.dataworks.boot.llm.chat;
 
-import java.util.UUID;
-
 public class ChatSessionFactory
 {
-    private final IChatCompletionExecutor chatExecutor;
+    private final IChatCompletionExecutor defaultChatCompletionExecutor;
 
-    public ChatSessionFactory(IChatCompletionExecutor chatExecutor)
+    public ChatSessionFactory(IChatCompletionExecutor chatCompletionExecutor)
     {
-        this.chatExecutor = chatExecutor;
+        defaultChatCompletionExecutor = chatCompletionExecutor;
     }
 
-    public IChatSession openSession(String systemPrompt, int recentRounds)
+    public IChatSession createDefaultSession(IChatCompletionExecutor chatCompletionExecutor, String systemPrompt, int recentRounds)
     {
         IChatContextManager contextManager =
             new InMemoryChatContextManager(systemPrompt, recentRounds);
 
         return new DefaultChatSession(
             contextManager,
-            chatExecutor
+            chatCompletionExecutor
         );
     }
 
-    public IChatSession createRedisSession()
+    public IChatSession createDefaultSession(String systemPrompt, int recentRounds)
+    {
+        return createDefaultSession(defaultChatCompletionExecutor, systemPrompt, recentRounds);
+    }
+
+    public IChatSession createRedisSession(IChatCompletionExecutor chatCompletionExecutor, String systemPrompt, int recentRounds)
     {
         return null;
     }
 
-    public IChatSession loadSessionFromRedis(String sessionId)
+    public IChatSession createRedisSession(String systemPrompt, int recentRounds)
+    {
+        return createRedisSession(defaultChatCompletionExecutor, systemPrompt, recentRounds);
+    }
+
+    public IChatSession loadSessionFromRedis(IChatCompletionExecutor chatCompletionExecutor, String sessionId, int recentRounds)
     {
         return null;
+    }
+
+    public IChatSession loadSessionFromRedis(String sessionId, int recentRounds)
+    {
+        return loadSessionFromRedis(defaultChatCompletionExecutor, sessionId, recentRounds);
     }
 }

@@ -19,13 +19,11 @@ public class RedisChatContextManager implements IChatContextManager
 
     private String userMessageToAppend;
 
-    public RedisChatContextManager(String systemPrompt, int recentRounds, String sessionId, RedisTemplate<String, String> stringRedisTemplate)
+    public RedisChatContextManager(int recentRounds, String sessionId, RedisTemplate<String, String> stringRedisTemplate)
     {
         this.recentRounds = recentRounds;
         this.sessionId = sessionId;
         this.stringRedisTemplate = stringRedisTemplate;
-
-        stringRedisTemplate.opsForValue().set(SYSTEM_PROMPT_KEY + sessionId, systemPrompt);
     }
 
     @Override
@@ -68,5 +66,16 @@ public class RedisChatContextManager implements IChatContextManager
             messages = new ArrayList<>();
 
         return messages;
+    }
+
+    public void setSystemPrompt(String systemPrompt)
+    {
+        stringRedisTemplate.opsForValue().set(SYSTEM_PROMPT_KEY + sessionId, systemPrompt);
+    }
+
+    public void clearCaches()
+    {
+        stringRedisTemplate.delete(CHAT_HISTORY_KEY_PREFIX + sessionId);
+        stringRedisTemplate.delete(SYSTEM_PROMPT_KEY + sessionId);
     }
 }
