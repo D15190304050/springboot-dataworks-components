@@ -7,19 +7,19 @@ import java.util.UUID;
 
 public class DefaultChatSession implements IChatSession
 {
-    private final UUID sessionId;
+    private final String sessionId;
     private final IChatContextManager contextManager;
     private final IChatCompletionExecutor chatCompletionExecutor;
 
-    public DefaultChatSession(UUID sessionId, IChatContextManager contextManager, IChatCompletionExecutor chatCompletionExecutor)
+    public DefaultChatSession(IChatContextManager contextManager, IChatCompletionExecutor chatCompletionExecutor)
     {
-        this.sessionId = sessionId;
+        this.sessionId = UUID.randomUUID().toString();
         this.contextManager = contextManager;
         this.chatCompletionExecutor = chatCompletionExecutor;
     }
 
     @Override
-    public UUID getSessionId()
+    public String getSessionId()
     {
         return sessionId;
     }

@@ -13,15 +13,22 @@ public class ChatSessionFactory
 
     public IChatSession openSession(String systemPrompt, int recentRounds)
     {
-        UUID sessionId = UUID.randomUUID();
-
         IChatContextManager contextManager =
             new InMemoryChatContextManager(systemPrompt, recentRounds);
 
         return new DefaultChatSession(
-            sessionId,
             contextManager,
             chatExecutor
         );
+    }
+
+    public IChatSession createRedisSession()
+    {
+        return null;
+    }
+
+    public IChatSession loadSessionFromRedis(String sessionId)
+    {
+        return null;
     }
 }

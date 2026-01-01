@@ -11,8 +11,8 @@ import java.util.List;
 public class RedisChatContextManager implements IChatContextManager
 {
     public static final String CHAT_HISTORY_KEY_PREFIX = "chatHistory:";
+    public static final String SYSTEM_PROMPT_KEY = "systemPrompt:";
 
-    private final String systemPrompt;
     private final int recentRounds;
     private final String sessionId;
     private final RedisTemplate<String, String> stringRedisTemplate;
@@ -21,15 +21,17 @@ public class RedisChatContextManager implements IChatContextManager
 
     public RedisChatContextManager(String systemPrompt, int recentRounds, String sessionId, RedisTemplate<String, String> stringRedisTemplate)
     {
-        this.systemPrompt = systemPrompt;
         this.recentRounds = recentRounds;
         this.sessionId = sessionId;
         this.stringRedisTemplate = stringRedisTemplate;
+
+        stringRedisTemplate.opsForValue().set(SYSTEM_PROMPT_KEY + sessionId, systemPrompt);
     }
 
     @Override
     public synchronized List<ChatMessage> buildContext()
     {
+        String systemPrompt = stringRedisTemplate.opsForValue().get(SYSTEM_PROMPT_KEY + sessionId);
         List<ChatMessage> messages = getChatHistory();
         return RecentRoundMessageExtractor.extract(messages, systemPrompt, recentRounds);
     }
@@ -49,6 +51,10 @@ public class RedisChatContextManager implements IChatContextManager
         List<ChatMessage> messages = getChatHistory();
         messages.add(new ChatMessage(Role.USER, userMessageToAppend));
         messages.add(new ChatMessage(Role.ASSISTANT, content));
+
+        // Send null system prompt, because we only need to store the user messages into redis.
+        List<ChatMessage> refreshedMessage = RecentRoundMessageExtractor.extract(messages, null, recentRounds);
+        stringRedisTemplate.opsForValue().set(CHAT_HISTORY_KEY_PREFIX + sessionId, JsonSerializer.serialize(refreshedMessage));
     }
 
     private List<ChatMessage> getChatHistory()
