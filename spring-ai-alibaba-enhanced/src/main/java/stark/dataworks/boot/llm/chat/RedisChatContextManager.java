@@ -60,6 +60,9 @@ public class RedisChatContextManager implements IChatContextManager
 
         // Send null system prompt, because we only need to store the user messages into redis.
         List<ChatMessage> refreshedMessage = RecentRoundMessageExtractor.extract(messages, null, recentRounds);
+
+        // For now, there is no expiration for the chat history, because there is no integration with DB.
+        // TODO: Integrate with DB to support expiration.
         stringRedisTemplate.opsForValue().set(CHAT_HISTORY_KEY_PREFIX + sessionId, JsonSerializer.serialize(refreshedMessage));
     }
 
