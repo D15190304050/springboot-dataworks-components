@@ -1,5 +1,6 @@
 package stark.dataworks.boot.llm.chat;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.StringUtils;
 import stark.dataworks.basic.data.json.JsonSerializer;
@@ -8,6 +9,7 @@ import stark.dataworks.boot.llm.Role;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 public class RedisChatContextManager implements IChatContextManager
 {
     public static final String CHAT_HISTORY_KEY_PREFIX = "chatHistory:";

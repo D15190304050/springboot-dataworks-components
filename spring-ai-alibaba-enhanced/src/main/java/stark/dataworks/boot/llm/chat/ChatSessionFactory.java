@@ -1,5 +1,8 @@
 package stark.dataworks.boot.llm.chat;
 
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.util.StringUtils;
+
 public class ChatSessionFactory
 {
     private final IChatCompletionExecutor defaultChatCompletionExecutor;
@@ -30,15 +33,17 @@ public class ChatSessionFactory
         return createRedisSession(defaultChatCompletionExecutor, systemPrompt, recentRounds);
     }
 
-    public IChatSession loadSessionFromRedis(IChatCompletionExecutor chatCompletionExecutor, String sessionId, int recentRounds)
+    public IChatSession loadSessionFromRedis(IChatCompletionExecutor chatCompletionExecutor, String sessionId, int recentRounds, RedisTemplate<String, String> stringRedisTemplate)
     {
+        if (!StringUtils.hasText(sessionId))
+            throw new IllegalArgumentException("Session ID is required.");
 
-
-        return null;
+        RedisChatContextManager contextManager = new RedisChatContextManager(recentRounds, sessionId, stringRedisTemplate);
+        return new RedisChatSession(chatCompletionExecutor, sessionId, contextManager);
     }
 
-    public IChatSession loadSessionFromRedis(String sessionId, int recentRounds)
+    public IChatSession loadSessionFromRedis(String sessionId, int recentRounds, RedisTemplate<String, String> stringRedisTemplate)
     {
-        return loadSessionFromRedis(defaultChatCompletionExecutor, sessionId, recentRounds);
+        return loadSessionFromRedis(defaultChatCompletionExecutor, sessionId, recentRounds, stringRedisTemplate);
     }
 }

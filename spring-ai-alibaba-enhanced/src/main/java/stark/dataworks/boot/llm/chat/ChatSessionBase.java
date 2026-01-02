@@ -5,6 +5,9 @@ import reactor.core.publisher.ConnectableFlux;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
+import stark.dataworks.basic.data.json.JsonSerializer;
+
+import java.util.List;
 
 @Slf4j
 public abstract class ChatSessionBase implements IChatSession
@@ -55,7 +58,10 @@ public abstract class ChatSessionBase implements IChatSession
     @Override
     public String chat(String userInput)
     {
-        String answer = chatCompletionExecutor.complete(contextManager.buildContext(), userInput);
+        List<ChatMessage> chatHistory = contextManager.buildContext();
+//        log.info("Chat history: {}", JsonSerializer.serialize(chatHistory));
+//        String answer = chatCompletionExecutor.complete(chatHistory, userInput);
+        String answer = "Answer of " + userInput;
         contextManager.appendUserMessage(userInput);
         contextManager.appendAssistantMessage(answer);
         return answer;

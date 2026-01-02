@@ -43,11 +43,7 @@ public class RedisSessionController
         if (!StringUtils.hasText(sessionId))
             throw new IllegalArgumentException("Session ID is required.");
 
-        stringRedisTemplate.opsForValue().get(sessionId);
-
-        chatSessionFactory.loadSessionFromRedis(sessionId, 1);
-
-        IChatSession chatSession = chatSessions.get(sessionId);
+        IChatSession chatSession = chatSessionFactory.loadSessionFromRedis(sessionId, 1, stringRedisTemplate);
         log.info("Chat session ID: {}", sessionId);
 
         return chatSession.chat(request.getUserInput());
