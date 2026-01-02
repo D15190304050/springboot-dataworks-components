@@ -1,13 +1,14 @@
 package stark.dataworks.boot.llm.chat;
 
-import reactor.core.publisher.Flux;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.UUID;
 
-public class RedisChatSession implements IChatSession
+@Slf4j
+public class RedisChatSession extends ChatSessionBase
 {
     private final IChatCompletionExecutor chatCompletionExecutor;
-    private final String sessionId;
+
     private final RedisChatContextManager contextManager;
 
     public RedisChatSession(IChatCompletionExecutor chatCompletionExecutor, RedisChatContextManager contextManager)
@@ -17,28 +18,9 @@ public class RedisChatSession implements IChatSession
 
     public RedisChatSession(IChatCompletionExecutor chatCompletionExecutor, String sessionId, RedisChatContextManager contextManager)
     {
+        super(sessionId, contextManager, chatCompletionExecutor);
         this.chatCompletionExecutor = chatCompletionExecutor;
-        this.sessionId = sessionId;
         this.contextManager = contextManager;
-    }
-
-    @Override
-    public String getSessionId()
-    {
-        return sessionId;
-    }
-
-    @Override
-    public ChatResponse chat(String userInput)
-    {
-        String answer = chatCompletionExecutor.complete(contextManager.buildContext(), userInput);
-        return new ChatResponse(answer);
-    }
-
-    @Override
-    public Flux<String> chatStream(String userInput)
-    {
-        return chatCompletionExecutor.stream(contextManager.buildContext(), userInput);
     }
 
     @Override

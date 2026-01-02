@@ -7,7 +7,7 @@ import java.util.UUID;
 public interface IChatSession
 {
     String getSessionId();
-    ChatResponse chat(String userInput);
+    String chat(String userInput);
     Flux<String> chatStream(String userInput);
     void close();
 }

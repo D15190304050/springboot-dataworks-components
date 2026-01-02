@@ -11,13 +11,8 @@ public class ChatSessionFactory
 
     public IChatSession createDefaultSession(IChatCompletionExecutor chatCompletionExecutor, String systemPrompt, int recentRounds)
     {
-        IChatContextManager contextManager =
-            new InMemoryChatContextManager(systemPrompt, recentRounds);
-
-        return new DefaultChatSession(
-            contextManager,
-            chatCompletionExecutor
-        );
+        IChatContextManager contextManager = new InMemoryChatContextManager(systemPrompt, recentRounds);
+        return new InMemoryChatSession(contextManager, chatCompletionExecutor);
     }
 
     public IChatSession createDefaultSession(String systemPrompt, int recentRounds)

@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import stark.dataworks.boot.llm.chat.AlibabaChatCompletionExecutor;
 import stark.dataworks.boot.llm.chat.ChatSessionFactory;
-import stark.dataworks.boot.llm.chat.DefaultChatSession;
 
 @Configuration
 public class DefaultSessionConfiguration
