@@ -8,7 +8,7 @@
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>default-session</artifactId>
+    <artifactId>redis-session</artifactId>
     <packaging>jar</packaging>
 
     <dependencies>

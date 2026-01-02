@@ -22,6 +22,7 @@
         <module>dubbo-air</module>
         <module>spring-ai-alibaba-enhanced</module>
         <module>examples/default-session</module>
+        <module>examples/redis-session</module>
     </modules>
 
     <properties>
