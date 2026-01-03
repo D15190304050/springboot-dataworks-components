@@ -1,17 +1,17 @@
 package stark.dataworks.boot.llm.chat;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import stark.dataworks.basic.data.json.JsonSerializer;
 import stark.dataworks.boot.llm.Role;
 
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 
-public class RedisChatContextManager implements IChatContextManager
+@Deprecated
+@Slf4j
+public class RedisChatContextManagerV1 implements IChatContextManager
 {
     public static final String CHAT_HISTORY_KEY_PREFIX = "chatHistory:";
     public static final String SYSTEM_PROMPT_KEY = "systemPrompt:";
@@ -20,33 +20,18 @@ public class RedisChatContextManager implements IChatContextManager
     private final String sessionId;
     private final RedisTemplate<String, String> stringRedisTemplate;
 
-    /**
-     * Function to load chat history from somewhere other than Redis.
-     */
-    private final Function<String, List<ChatMessage>> fnLoadChatHistory;
-
     private String userMessageToAppend;
 
-    public RedisChatContextManager(int recentRounds, String sessionId, RedisTemplate<String, String> stringRedisTemplate, Function<String, List<ChatMessage>> fnLoadChatHistory)
+    public RedisChatContextManagerV1(int recentRounds, String sessionId, RedisTemplate<String, String> stringRedisTemplate)
     {
-        if (recentRounds < 0)
-            throw new IllegalArgumentException("Recent rounds must be >= 0.");
-
-        if (!StringUtils.hasText(sessionId))
-            throw new IllegalArgumentException("Session ID is required.");
-
-        if (stringRedisTemplate == null)
-            throw new IllegalArgumentException("Redis template is required.");
-
         this.recentRounds = recentRounds;
         this.sessionId = sessionId;
         this.stringRedisTemplate = stringRedisTemplate;
-        this.fnLoadChatHistory = fnLoadChatHistory;
     }
 
-    public RedisChatContextManager(String systemPrompt, int recentRounds, String sessionId, RedisTemplate<String, String> stringRedisTemplate, Function<String, List<ChatMessage>> fnLoadChatHistory)
+    public RedisChatContextManagerV1(String systemPrompt, int recentRounds, String sessionId, RedisTemplate<String, String> stringRedisTemplate)
     {
-        this(recentRounds, sessionId, stringRedisTemplate, fnLoadChatHistory);
+        this(recentRounds, sessionId, stringRedisTemplate);
         stringRedisTemplate.opsForValue().set(SYSTEM_PROMPT_KEY + sessionId, systemPrompt);
     }
 
@@ -77,12 +62,9 @@ public class RedisChatContextManager implements IChatContextManager
         // Send null system prompt, because we only need to store the user messages into redis.
         List<ChatMessage> refreshedMessage = RecentRoundMessageExtractor.extract(messages, null, recentRounds);
 
-        // If there is no function to load chat history, then we can save the chat history to redis.
-        // Otherwise, we can only save the chat history to redis for 10 minutes.
-        if (fnLoadChatHistory == null)
-            stringRedisTemplate.opsForValue().set(CHAT_HISTORY_KEY_PREFIX + sessionId, JsonSerializer.serialize(refreshedMessage));
-        else
-            stringRedisTemplate.opsForValue().set(CHAT_HISTORY_KEY_PREFIX + sessionId, JsonSerializer.serialize(refreshedMessage), Duration.ofMinutes(10L));
+        // For now, there is no expiration for the chat history, because there is no integration with DB.
+        // TODO: Integrate with DB to support expiration.
+        stringRedisTemplate.opsForValue().set(CHAT_HISTORY_KEY_PREFIX + sessionId, JsonSerializer.serialize(refreshedMessage));
     }
 
     private List<ChatMessage> getChatHistory()
@@ -93,14 +75,7 @@ public class RedisChatContextManager implements IChatContextManager
         if (StringUtils.hasText(messagesJson))
             messages = JsonSerializer.deserializeList(messagesJson, ChatMessage.class);
         else
-        {
-            if (fnLoadChatHistory == null)
-                return new ArrayList<>();
-
-            messages = fnLoadChatHistory.apply(sessionId);
-            if (CollectionUtils.isEmpty(messages))
-                messages = new ArrayList<>();
-        }
+            messages = new ArrayList<>();
 
         return messages;
     }
