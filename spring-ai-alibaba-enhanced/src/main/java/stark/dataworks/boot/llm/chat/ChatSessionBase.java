@@ -60,8 +60,8 @@ public abstract class ChatSessionBase implements IChatSession
     {
         List<ChatMessage> chatHistory = contextManager.buildContext();
 //        log.info("Chat history: {}", JsonSerializer.serialize(chatHistory));
-//        String answer = chatCompletionExecutor.complete(chatHistory, userInput);
-        String answer = "Answer of " + userInput;
+        String answer = chatCompletionExecutor.complete(chatHistory, userInput);
+//        String answer = "Answer of " + userInput;
         contextManager.appendUserMessage(userInput);
         contextManager.appendAssistantMessage(answer);
         return answer;
